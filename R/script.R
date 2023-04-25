@@ -36,6 +36,24 @@ summarise(group_by(df, aged), n())
 stats_agregees(df %>% filter(sexe == "Homme") %>% pull(aged))
 stats_agregees(df %>% filter(sexe == "Femme") %>% pull(aged))
 
+stats_age <- df %>%
+  group_by(decennie = decennie_a_partir_annee(age)) %>%
+  summarise(n())
+
+table_age <- gt::gt(stats_age) %>%
+  gt::tab_header(
+    title = "Distribution des âges dans notre population"
+  ) %>%
+  gt::fmt_number(
+    columns = `n()`,
+    sep_mark = " ",
+    decimals = 0
+  ) %>%
+  gt::cols_label(
+    decennie = "Tranche d'âge",
+    `n()` = "Population"
+  )
+
 ## stats trans par statut =====================
 
 df3 <- df %>%
